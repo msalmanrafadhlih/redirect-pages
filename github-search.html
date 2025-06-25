@@ -1,12 +1,174 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redirecting...</title>
-    <meta http-equiv="refresh" content="3;url=https://github.com/search?q=msalmanrafadhlih&type=users">
+    <meta http-equiv="refresh" content="5;url=https://github.com/search?q=msalmanrafadhlih&type=users">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-..."
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        overscroll-behavior: none;
+        background: #0d1117;
+        font-family: "Segoe UI", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: #fff;
+      }
+      @keyframes typing {
+        from {
+          max-width: 0;
+        }
+        to {
+          max-width: 100%;
+        }
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          border-color: transparent;
+        }
+        50% {
+          border-color: #58a6ff;
+        }
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes fadeInScale {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .animate-typing {
+        animation: typing 2s steps(30, end) forwards, blink 1s step-end infinite;
+        animation-delay: 0s, 3.5s;
+        animation-fill-mode: forwards;
+        white-space: nowrap;
+        overflow: hidden;
+        border-right: 2px solid #58a6ff;
+      }
+      .spinner-glow {
+        background: conic-gradient(
+          from 0deg,
+          #58a6ff,
+          #9b5de5,
+          #f15bb5,
+          #00bbf9,
+          #00f5d4,
+          #58a6ff
+        );
+        animation: spin 1.5s linear infinite;
+        filter: blur(12px);
+        opacity: 0.8;
+      }
+    </style>
   </head>
-  <body style="background: #0d1117; color: white; font-family: sans-serif; text-align: center; padding-top: 100px;">
-    <h2>Redirecting to GitHub user search...</h2>
-    <p>If you're not redirected, <a style="color:#58a6ff;" href="https://github.com/search?q=msalmanrafadhlih&type=users">click here</a>.</p>
+  <body>
+    <canvas id="bg" class="fixed top-0 left-0 w-full h-full z-0"></canvas>
+    <div
+      class="relative z-10 flex flex-col items-center justify-center text-center animate-[fadeInScale_1.2s_ease_forwards]"
+    >
+      <h1 class="text-2xl md:text-3xl font-bold mb-6 animate-typing">
+        Redirecting to GitHub...
+      </h1>
+      <div class="relative w-[90px] h-[90px] md:w-[100px] md:h-[100px] my-4">
+        <div class="spinner-glow absolute inset-0 rounded-full z-0"></div>
+        <div
+          class="absolute inset-0 rounded-full bg-[#0d1117] flex items-center justify-center z-10 overflow-hidden"
+        >
+          <i class="fa-brands fa-github text-white text-[2.8rem]"></i>
+        </div>
+      </div>
+      <p style="margin-top: 50px">
+        If you're not redirected,
+        <a
+          href="https://github.com/search?q=msalmanrafadhlih&type=users"
+          class="text-sm text-[#58a6ff] hover:text-[#8ab4f8] mt-4"
+        >
+          click here</a
+        >.
+      </p>
+    </div>
+    <audio autoplay loop id="bgm">
+      <source
+        src="https://cdn.pixabay.com/audio/2023/01/15/audio_b817918c58.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
+    <script>
+      const audio = document.getElementById("bgm");
+      document.body.addEventListener("click", () => {
+        if (audio.paused) {
+          audio.play().catch(() => {});
+        }
+      });
+      const canvas = document.getElementById("bg");
+      const ctx = canvas.getContext("2d");
+      let w, h, particles;
+      function init() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        particles = [];
+        for (let i = 0; i < 100; i++) {
+          particles.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            r: Math.random() * 1.5 + 0.5,
+            d: Math.random() * 1 + 0.5,
+          });
+        }
+      }
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "#58a6ff99";
+        particles.forEach((p) => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        update();
+      }
+      function update() {
+        particles.forEach((p) => {
+          p.y += p.d;
+          if (p.y > h) {
+            p.y = 0;
+            p.x = Math.random() * w;
+          }
+        });
+      }
+      function loop() {
+        draw();
+        requestAnimationFrame(loop);
+      }
+      init();
+      loop();
+      window.addEventListener("resize", init);
+    </script>
   </body>
 </html>
