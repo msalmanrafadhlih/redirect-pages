@@ -32,6 +32,8 @@
         flex-direction: column;
         color: #fff;
       }
+
+
       @keyframes typing {
         from {
           max-width: 0;
@@ -86,9 +88,22 @@
         filter: blur(12px);
         opacity: 0.8;
       }
+
+  #space-warp {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    background: black;
+  }
+
     </style>
   </head>
   <body>
+    <canvas id="space-warp"></canvas>
+
     <div
       class="relative z-10 flex flex-col items-center justify-center text-center animate-[fadeInScale_1.2s_ease_forwards]"
     >
@@ -113,5 +128,78 @@
         >.
       </p>
     </div>
+    
+<script>
+  const canvas = document.getElementById("space-warp");
+  const ctx = canvas.getContext("2d");
+  let w, h, stars = [];
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+
+  window.addEventListener("resize", resize);
+  resize();
+
+  class Star {
+    constructor() {
+      this.reset();
+    }
+
+    reset() {
+      this.x = 0;
+      this.y = 0;
+      this.z = Math.random() * w;
+      this.prevX = 0;
+      this.prevY = 0;
+    }
+
+    update() {
+      this.prevX = this.x;
+      this.prevY = this.y;
+
+      this.z -= 5;
+      const speed = 0.005;
+      this.x = (this.x || (Math.random() - 0.5) * w) * (1 + speed);
+      this.y = (this.y || (Math.random() - 0.5) * h) * (1 + speed);
+
+      if (this.x > w || this.x < -w || this.y > h || this.y < -h || this.z < 1) {
+        this.reset();
+      }
+    }
+
+    draw() {
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(88,166,255,0.5)";
+      ctx.lineWidth = 1;
+      ctx.moveTo(w / 2 + this.prevX, h / 2 + this.prevY);
+      ctx.lineTo(w / 2 + this.x, h / 2 + this.y);
+      ctx.stroke();
+    }
+  }
+
+  function initStars(count = 400) {
+    stars = [];
+    for (let i = 0; i < count; i++) {
+      stars.push(new Star());
+    }
+  }
+
+  function animate() {
+    ctx.fillStyle = "rgba(13, 17, 23, 0.2)";
+    ctx.fillRect(0, 0, w, h);
+    stars.forEach((s) => {
+      s.update();
+      s.draw();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  initStars();
+  animate();
+</script>
+
+
   </body>
 </html>
