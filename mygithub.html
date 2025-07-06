@@ -89,7 +89,6 @@
     </style>
   </head>
   <body>
-    <canvas id="bg" class="fixed top-0 left-0 w-full h-full z-0"></canvas>
     <div
       class="relative z-10 flex flex-col items-center justify-center text-center animate-[fadeInScale_1.2s_ease_forwards]"
     >
@@ -114,61 +113,5 @@
         >.
       </p>
     </div>
-    <audio autoplay loop id="bgm">
-      <source
-        src="https://cdn.pixabay.com/audio/2023/01/15/audio_b817918c58.mp3"
-        type="audio/mpeg"
-      />
-    </audio>
-    <script>
-      const audio = document.getElementById("bgm");
-      document.body.addEventListener("click", () => {
-        if (audio.paused) {
-          audio.play().catch(() => {});
-        }
-      });
-      const canvas = document.getElementById("bg");
-      const ctx = canvas.getContext("2d");
-      let w, h, particles;
-      function init() {
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
-        particles = [];
-        for (let i = 0; i < 100; i++) {
-          particles.push({
-            x: Math.random() * w,
-            y: Math.random() * h,
-            r: Math.random() * 1.5 + 0.5,
-            d: Math.random() * 1 + 0.5,
-          });
-        }
-      }
-      function draw() {
-        ctx.clearRect(0, 0, w, h);
-        ctx.fillStyle = "#58a6ff99";
-        particles.forEach((p) => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fill();
-        });
-        update();
-      }
-      function update() {
-        particles.forEach((p) => {
-          p.y += p.d;
-          if (p.y > h) {
-            p.y = 0;
-            p.x = Math.random() * w;
-          }
-        });
-      }
-      function loop() {
-        draw();
-        requestAnimationFrame(loop);
-      }
-      init();
-      loop();
-      window.addEventListener("resize", init);
-    </script>
   </body>
 </html>
